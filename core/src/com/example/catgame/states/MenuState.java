@@ -5,39 +5,56 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.example.catgame.CatGame;
 
 public class MenuState extends State {
 
     private Texture background;
+
     private Texture playBtn;
+    private Rectangle playBounds;
     private Texture recordsBtn;
+    private Rectangle recordsBounds;
     private Texture exitBtn;
+    private Rectangle exitBounds;
+
+    Vector3 touchPoint;
 
     public MenuState(GameStateManager gsm) {
         super(gsm);
+
+        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
+        camera.update();
+
         background = new Texture("menu_bg 16x10.png");
+
         playBtn = new Texture("play.png");
+        playBounds = new Rectangle(camera.position.x - (playBtn.getWidth() / 2), (camera.position.y / 2) * 3 - (playBtn.getHeight() / 2), playBtn.getWidth(), playBtn.getHeight());
         recordsBtn = new Texture("records.png");
+        recordsBounds = new Rectangle(camera.position.x - (recordsBtn.getWidth() / 2), camera.position.y - (recordsBtn.getHeight() / 2), recordsBtn.getWidth(), recordsBtn.getHeight());
         exitBtn = new Texture("exit.png");
-        camera.setToOrtho(false, CatGame.WIDTH, CatGame.HEIGHT);
+        exitBounds = new Rectangle(camera.position.x - (exitBtn.getWidth() / 2), (camera.position.y / 2) * 1 - (exitBtn.getHeight() / 2), exitBtn.getWidth(), exitBtn.getHeight());
+
+        touchPoint = new Vector3();
     }
 
     @Override
     protected void handleInput() {
-        Gdx.input.setInputProcessor(new InputAdapter(){
-            @Override
-            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                if (screenX >= camera.position.x - (playBtn.getWidth() / 2)) /* && screenX <= camera.position.x + (playBtn.getWidth() / 2) &&
-                        screenY >= (camera.position.y / 2) * 3 - (playBtn.getHeight() / 2) && screenY <= (camera.position.y / 2) * 3 + (playBtn.getHeight() / 2))*/ {
-                    Gdx.app.log("D2", String.valueOf(playBtn.getWidth()));
 
-                    gsm.set(new PlayState(gsm));
-                }
+        if (Gdx.input.justTouched()) {
+            camera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 
-                return super.touchDown(screenX, screenY, pointer, button);
+            if (playBounds.contains(touchPoint.x, touchPoint.y)) {
+                gsm.set(new PlayState(gsm));
             }
-        });
+            if (recordsBounds.contains(touchPoint.x, touchPoint.y)) {
+                Gdx.app.log("D", "success bich2");
+            }
+            if (exitBounds.contains(touchPoint.x, touchPoint.y)) {
+                Gdx.app.log("D", "success bich3");
+            }
+        }
     }
 
     @Override

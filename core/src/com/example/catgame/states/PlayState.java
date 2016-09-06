@@ -13,38 +13,23 @@ public class PlayState extends State {
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
-        camera.setToOrtho(false, CatGame.WIDTH, CatGame.HEIGHT);
+
+        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
+        camera.update();
+
         cat = new Texture("cat.png");
     }
 
     @Override
     protected void handleInput() {
-        Gdx.input.setInputProcessor(new InputAdapter(){
-            @Override
-            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                if (screenX >= 18 * (camera.position.x / 10)) {
-                    gsm.set(new MenuState(gsm));
-                    Gdx.app.log("D", String.valueOf(camera.position.x));
-                    Gdx.app.log("D", String.valueOf(screenX));
-                }
-
-                return super.touchDown(screenX, screenY, pointer, button);
-            }
-        });
+        if (Gdx.input.justTouched()) {
+            gsm.set(new MenuState(gsm));
+        }
     }
 
     @Override
     public void update(float dt) {
         handleInput();
-        if (Gdx.input.isTouched()) {
-            Vector3 touchPos = new Vector3();
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            Gdx.app.log("D1", String.valueOf(touchPos));
-            Gdx.app.log("D1", String.valueOf(camera.position));
-            camera.unproject(touchPos);
-            Gdx.app.log("D2", String.valueOf(touchPos));
-            Gdx.app.log("D2", String.valueOf(camera.unproject(camera.position)));
-        }
     }
 
     @Override
@@ -57,6 +42,6 @@ public class PlayState extends State {
 
     @Override
     public void dispose() {
-
+        cat.dispose();
     }
 }

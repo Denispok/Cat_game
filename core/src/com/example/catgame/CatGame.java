@@ -8,8 +8,12 @@ import com.example.catgame.states.GameStateManager;
 import com.example.catgame.states.MenuState;
 
 public class CatGame extends ApplicationAdapter {
-	public static final float WIDTH = 1920;
-	public static final float HEIGHT = 1200;
+	/*public static final float WIDTH = 1920;
+	public static final float HEIGHT = 1200;*/
+
+	public static float WIDTH;
+	public static float HEIGHT;
+	public static final int WIDTH_PRJ = 1920;
 
 	public static final String TITLE = "Cat Demo";
 
@@ -20,6 +24,10 @@ public class CatGame extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		Gdx.gl.glClearColor(1, 0, 0, 1);
+
+		WIDTH = Gdx.graphics.getWidth();
+		HEIGHT = Gdx.graphics.getHeight();
+
 		gsm = new GameStateManager();
 		gsm.push(new MenuState(gsm));
 	}
