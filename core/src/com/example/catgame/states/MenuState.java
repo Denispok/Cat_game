@@ -52,7 +52,7 @@ public class MenuState extends State {
                 Gdx.app.log("D", "success bich2");
             }
             if (exitBounds.contains(touchPoint.x, touchPoint.y)) {
-                Gdx.app.log("D", "success bich3");
+                gsm.pop();
             }
         }
     }
