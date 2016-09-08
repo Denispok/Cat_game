@@ -14,4 +14,7 @@ public class Cat {
         cat = new Texture("cat_lying.png");
     }
 
+    public Texture getCat() {
+        return cat;
+    }
 }

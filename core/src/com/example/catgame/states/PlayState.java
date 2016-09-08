@@ -2,6 +2,7 @@ package com.example.catgame.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.example.catgame.CatGame;
 import com.example.catgame.locations.Room;
 import com.example.catgame.sprites.Cat;
 
@@ -36,7 +37,8 @@ public class PlayState extends State {
     public void render(SpriteBatch sb) {
         sb.setProjectionMatrix(camera.combined);
         sb.begin();
-        sb.draw(room.getRoomBg(), 0, 0);
+        sb.draw(room.getRoomBg(), camera.position.x - camera.viewportWidth / 2, camera.position.y - room.getRoomBg().getHeight() / 2);
+        sb.draw(cat.getCat(), camera.position.x - 250, camera.position.y + 30);
         sb.end();
     }
 

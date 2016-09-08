@@ -16,7 +16,7 @@ public abstract class State {
         this.gsm = gsm;
 
         //camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera = new OrthographicCamera(CatGame.WIDTH_PRJ, CatGame.WIDTH_PRJ * (CatGame.HEIGHT / CatGame.WIDTH));
+        camera = new OrthographicCamera(CatGame.WIDTH_PRJ, CatGame.WIDTH_PRJ * CatGame.RATIO);
         camera.update();
 
         mouse = new Vector3();

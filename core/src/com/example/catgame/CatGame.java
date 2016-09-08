@@ -13,7 +13,9 @@ public class CatGame extends ApplicationAdapter {
 
 	public static float WIDTH;
 	public static float HEIGHT;
+	public static float RATIO;
 	public static final int WIDTH_PRJ = 1920;
+	public static final int HEIGHT_PRJ = 1080;
 
 	public static final String TITLE = "Cat Demo";
 
@@ -27,6 +29,7 @@ public class CatGame extends ApplicationAdapter {
 
 		WIDTH = Gdx.graphics.getWidth();
 		HEIGHT = Gdx.graphics.getHeight();
+		RATIO = HEIGHT / WIDTH;
 
 		gsm = new GameStateManager();
 		gsm.push(new MenuState(gsm));
