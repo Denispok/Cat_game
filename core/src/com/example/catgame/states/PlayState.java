@@ -15,7 +15,7 @@ public class PlayState extends State {
         super(gsm);
 
         room = new Room();
-        cat = new Cat();
+        cat = new Cat(room);
 
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
@@ -31,6 +31,7 @@ public class PlayState extends State {
     @Override
     public void update(float dt) {
         handleInput();
+        cat.update(dt);
     }
 
     @Override
@@ -38,7 +39,7 @@ public class PlayState extends State {
         sb.setProjectionMatrix(camera.combined);
         sb.begin();
         sb.draw(room.getRoomBg(), camera.position.x - camera.viewportWidth / 2, camera.position.y - room.getRoomBg().getHeight() / 2);
-        sb.draw(cat.getCat(), camera.position.x - 250, camera.position.y + 30);
+        cat.render(sb);
         sb.end();
     }
 
