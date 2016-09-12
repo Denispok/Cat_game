@@ -31,7 +31,7 @@ public class PlayState extends State {
     @Override
     public void update(float dt) {
         handleInput();
-        cat.update(dt);
+        cat.update(dt, room);
     }
 
     @Override

@@ -17,12 +17,19 @@ public class Room {
     }
 
     private void init_wp() {
-        wp.add(new Waypoint(0, true, 1, 200, 200, 2, 3));
-        wp.add(new Waypoint(1, false, 0, 300, 300, 1, 3));
-        wp.add(new Waypoint(2, true, 2, 400, 400, 1, 2));
+        wp.add(new Waypoint(0, true, 1, 0, 0, 1, 3));
+        wp.add(new Waypoint(1, false, 0, 1660, 1025, 2, 0));
+        wp.add(new Waypoint(2, false, 0, 0, 1025, 3, 1));
+        wp.add(new Waypoint(3, false, 0, 1660, 0, 0, 2));
+        wp.add(new Waypoint(4, true, 2, 600, 500, 0, 2, 1));
     }
 
-    public Waypoint getWp (int spawn_id){
+    public Waypoint getWp (int id){
+        if (wp.get(id) != null) return wp.get(id);
+        else return null;
+    }
+
+    public Waypoint getWpBySpawnId (int spawn_id){
         for (int i = 0; i <= wp.size() - 1; i++){
             if (wp.get(i).getSpawn_id() == spawn_id) return wp.get(i);
         }

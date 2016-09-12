@@ -22,8 +22,6 @@ public class Waypoint {
         routes[0] = rt1;
 
         point = new Rectangle(x, y, POINT_WIDTH, POINT_HEIGHT);
-
-        initWaypoint();
     }
 
     public Waypoint(int id, boolean isSpawn, int spawn_id, int x, int y, int rt1, int rt2){
@@ -65,16 +63,20 @@ public class Waypoint {
         point = new Rectangle(x, y, POINT_WIDTH, POINT_HEIGHT);
     }
 
-    private void initWaypoint() {
-
-    }
-
     public boolean isSpawn() {
         return isSpawn;
     }
 
     public int getSpawn_id() {
         return spawn_id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int[] getRoutes() {
+        return routes;
     }
 
     public Rectangle getPoint() {
