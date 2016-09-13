@@ -14,11 +14,11 @@ public class PlayState extends State {
     public PlayState(GameStateManager gsm) {
         super(gsm);
 
-        room = new Room();
-        cat = new Cat(room);
-
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
+
+        room = new Room(camera);
+        cat = new Cat(room);
     }
 
     @Override
@@ -32,6 +32,10 @@ public class PlayState extends State {
     public void update(float dt) {
         handleInput();
         cat.update(dt, room);
+
+        //Gdx.app.log("D", "camera.position.y: " + String.valueOf(camera.position.y));
+        //Gdx.app.log("D", "CatGame.HEIGHT_PRJ: " + String.valueOf(CatGame.HEIGHT_PRJ));
+        //Gdx.app.log("D", "camera.viewportHeight: " + String.valueOf(camera.viewportHeight));
     }
 
     @Override

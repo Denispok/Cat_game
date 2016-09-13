@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class Cat {
 
-    private static final double WAITTIME = 0.2;
+    private static final double WAITTIME = 2;
     private static final double VELOCITY = 50;
 
     private double wait_time;
@@ -78,7 +78,7 @@ public class Cat {
         }
 
 
-        Gdx.app.log("D", "wait_time: " + String.valueOf(wait_time));
+        //Gdx.app.log("D", "wait_time: " + String.valueOf(wait_time));
     }
 
     private void catMove() {

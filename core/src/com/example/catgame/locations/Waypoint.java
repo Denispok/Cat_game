@@ -1,6 +1,11 @@
 package com.example.catgame.locations;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
+import com.example.catgame.CatGame;
+import com.example.catgame.states.PlayState;
+import com.example.catgame.states.State;
 
 public class Waypoint {
 
@@ -13,7 +18,7 @@ public class Waypoint {
     private int[] routes;
     private boolean isSpawn;
 
-    public Waypoint(int id, boolean isSpawn, int spawn_id, int x, int y, int rt1){
+    public Waypoint(OrthographicCamera camera, int id, boolean isSpawn, int spawn_id, int x, int y, int rt1){
         this.id = id;
         this.spawn_id = spawn_id;
         this.isSpawn = isSpawn;
@@ -21,10 +26,11 @@ public class Waypoint {
         routes = new int[1];
         routes[0] = rt1;
 
-        point = new Rectangle(x, y, POINT_WIDTH, POINT_HEIGHT);
+        point = new Rectangle(x, (camera.position.y - CatGame.HEIGHT_PRJ / 2) + y, POINT_WIDTH, POINT_HEIGHT);
+
     }
 
-    public Waypoint(int id, boolean isSpawn, int spawn_id, int x, int y, int rt1, int rt2){
+    public Waypoint(OrthographicCamera camera, int id, boolean isSpawn, int spawn_id, int x, int y, int rt1, int rt2){
         this.id = id;
         this.spawn_id = spawn_id;
         this.isSpawn = isSpawn;
@@ -33,10 +39,11 @@ public class Waypoint {
         routes[0] = rt1;
         routes[1] = rt2;
 
-        point = new Rectangle(x, y, POINT_WIDTH, POINT_HEIGHT);
+        point = new Rectangle(x, (camera.position.y - CatGame.HEIGHT_PRJ / 2) + y, POINT_WIDTH, POINT_HEIGHT);
+
     }
 
-    public Waypoint(int id, boolean isSpawn, int spawn_id, int x, int y, int rt1, int rt2, int rt3){
+    public Waypoint(OrthographicCamera camera, int id, boolean isSpawn, int spawn_id, int x, int y, int rt1, int rt2, int rt3){
         this.id = id;
         this.spawn_id = spawn_id;
         this.isSpawn = isSpawn;
@@ -46,10 +53,11 @@ public class Waypoint {
         routes[1] = rt2;
         routes[2] = rt3;
 
-        point = new Rectangle(x, y, POINT_WIDTH, POINT_HEIGHT);
+        point = new Rectangle(x, (camera.position.y - CatGame.HEIGHT_PRJ / 2) + y, POINT_WIDTH, POINT_HEIGHT);
+
     }
 
-    public Waypoint(int id, boolean isSpawn, int spawn_id, int x, int y, int rt1, int rt2, int rt3, int rt4){
+    public Waypoint(OrthographicCamera camera, int id, boolean isSpawn, int spawn_id, int x, int y, int rt1, int rt2, int rt3, int rt4){
         this.id = id;
         this.spawn_id = spawn_id;
         this.isSpawn = isSpawn;
@@ -60,7 +68,8 @@ public class Waypoint {
         routes[2] = rt3;
         routes[3] = rt4;
 
-        point = new Rectangle(x, y, POINT_WIDTH, POINT_HEIGHT);
+        point = new Rectangle(x, (camera.position.y - (CatGame.HEIGHT_PRJ / 2)) + y, POINT_WIDTH, POINT_HEIGHT);
+
     }
 
     public boolean isSpawn() {

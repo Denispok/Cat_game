@@ -1,5 +1,6 @@
 package com.example.catgame.locations;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
@@ -11,17 +12,17 @@ public class Room {
     private Texture room_bg;
     private List<Waypoint> wp = new ArrayList<Waypoint>();
 
-    public Room (){
+    public Room (OrthographicCamera camera){
         room_bg = new Texture("room1920w.jpg");
-        init_wp();
+        init_wp(camera);
     }
 
-    private void init_wp() {
-        wp.add(new Waypoint(0, true, 1, 0, 0, 1, 3));
-        wp.add(new Waypoint(1, false, 0, 1660, 1025, 2, 0));
-        wp.add(new Waypoint(2, false, 0, 0, 1025, 3, 1));
-        wp.add(new Waypoint(3, false, 0, 1660, 0, 0, 2));
-        wp.add(new Waypoint(4, true, 2, 600, 500, 0, 2, 1));
+    private void init_wp(OrthographicCamera cam) { // PROJECT 16:9 !!!
+        wp.add(new Waypoint(cam, 0, true, 1, 0, 0, 1, 3, 4));
+        wp.add(new Waypoint(cam, 1, false, 0, 1660, 970, 2, 0));
+        wp.add(new Waypoint(cam, 2, false, 0, 0, 970, 3, 1, 4));
+        wp.add(new Waypoint(cam, 3, false, 0, 1660, 0, 0, 2));
+        wp.add(new Waypoint(cam, 4, true, 2, 600, 500, 0, 2, 1));
     }
 
     public Waypoint getWp (int id){
