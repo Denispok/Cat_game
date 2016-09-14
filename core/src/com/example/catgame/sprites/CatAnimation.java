@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class CatAnimation {
 
-    private static final float FRAME_SPEED = 0.25f;
+    private static final float FRAME_SPEED = 0.20f;
 
     private static final int WALK_COLS = 4;
     Animation walkAnimation;

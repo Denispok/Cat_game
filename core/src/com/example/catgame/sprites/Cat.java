@@ -11,7 +11,7 @@ import java.util.Random;
 public class Cat {
 
     private static final double WAITTIME = 3;
-    private static final double VELOCITY = 10;
+    private static final double VELOCITY = 5;
 
     private double wait_time;
     private Vector3 position;
@@ -19,7 +19,7 @@ public class Cat {
     private int current_point_id;
     private float current_distance_x;
     private float current_distance_y;
-    private double current_hypotinuse;
+    private double current_hypotenuse;
     private int direction_x; // -1 is LEFT, 1 is RIGHT
     private int direction_y;
     private boolean point_active;
@@ -99,18 +99,34 @@ public class Cat {
 
     public void render(SpriteBatch sb) {
         catAnim.stateTime += Gdx.graphics.getDeltaTime();
+
+                                         /* STATES */
         if (state.equals("walk")) {
             catAnim.currentFrame = catAnim.walkAnimation.getKeyFrame(catAnim.stateTime, true);
+            animFlip();
         } else if (state.equals("sit")){
             catAnim.currentFrame = catAnim.sitAnimation.getKeyFrame(catAnim.stateTime, false);
+            animFlip();
+        } else if (state.equals("lie")){
+            catAnim.currentFrame = catAnim.lieAnimation.getKeyFrame(catAnim.stateTime, false);
+            animFlip();
+        } else if (state.equals("jump")){
+            catAnim.currentFrame = catAnim.jumpAnimation.getKeyFrame(catAnim.stateTime, false);
+            animFlip();
         }
+
         sb.draw(catAnim.currentFrame, position.x, position.y);
+    }
+
+    private void animFlip() {
+        if(!catAnim.currentFrame.isFlipX() && direction_x == 1) catAnim.currentFrame.flip(true, false);
+        else if(catAnim.currentFrame.isFlipX() && direction_x == -1) catAnim.currentFrame.flip(true, false);
     }
 
     private void catMove() {
         if (current_distance_x != 0 && current_distance_y != 0){
-            position.x += direction_x * VELOCITY * (current_distance_x / current_hypotinuse);
-            position.y += direction_y * VELOCITY * (current_distance_y / current_hypotinuse);
+            position.x += direction_x * VELOCITY * (current_distance_x / current_hypotenuse);
+            position.y += direction_y * VELOCITY * (current_distance_y / current_hypotenuse);
         } else if (current_distance_x != 0){
             position.x += direction_x * VELOCITY;
         } else if (current_distance_y != 0){
@@ -130,7 +146,7 @@ public class Cat {
 
         current_distance_x = Math.abs(room.getWp(current_point_id).getPoint().getX() - room.getWp(old_id).getPoint().getX());
         current_distance_y = Math.abs(room.getWp(current_point_id).getPoint().getY() - room.getWp(old_id).getPoint().getY());
-        current_hypotinuse = Math.hypot(current_distance_x, current_distance_y);
+        current_hypotenuse = Math.hypot(current_distance_x, current_distance_y);
 
         point_active = true;
         state = "walk";

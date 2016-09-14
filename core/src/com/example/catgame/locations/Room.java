@@ -18,11 +18,11 @@ public class Room {
     }
 
     private void init_wp(OrthographicCamera cam) { // PROJECT 16:9 !!!
-        wp.add(new Waypoint(cam, 0, true, 1, 0, 0, 1, 3, 4));
-        wp.add(new Waypoint(cam, 1, false, 0, 1660, 970, 2, 0));
-        wp.add(new Waypoint(cam, 2, false, 0, 0, 970, 3, 1, 4));
-        wp.add(new Waypoint(cam, 3, false, 0, 1660, 0, 0, 2));
-        wp.add(new Waypoint(cam, 4, true, 2, 600, 500, 0, 2, 1));
+        wp.add(new Waypoint(cam, 0, 0, true, 1, 0, 0, 1, 3, 4));
+        wp.add(new Waypoint(cam, 1, 0, false, 0, 1660, 920, 2, 0));
+        wp.add(new Waypoint(cam, 2, 0, false, 0, 0, 920, 3, 1, 4));
+        wp.add(new Waypoint(cam, 3, 0, false, 0, 1660, 0, 0, 2));
+        wp.add(new Waypoint(cam, 4, 0, true, 2, 600, 500, 0, 2, 1));
     }
 
     public Waypoint getWp (int id){
