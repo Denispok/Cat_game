@@ -30,10 +30,13 @@ public class MenuState extends State {
         background = new Texture("menu_bg 16x10.png");
 
         playBtn = new Texture("play.png");
+        playBtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         playBounds = new Rectangle(camera.position.x - (playBtn.getWidth() / 2), (camera.position.y / 2) * 3 - (playBtn.getHeight() / 2), playBtn.getWidth(), playBtn.getHeight());
         recordsBtn = new Texture("records.png");
+        recordsBtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         recordsBounds = new Rectangle(camera.position.x - (recordsBtn.getWidth() / 2), camera.position.y - (recordsBtn.getHeight() / 2), recordsBtn.getWidth(), recordsBtn.getHeight());
         exitBtn = new Texture("exit.png");
+        exitBtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         exitBounds = new Rectangle(camera.position.x - (exitBtn.getWidth() / 2), (camera.position.y / 2) * 1 - (exitBtn.getHeight() / 2), exitBtn.getWidth(), exitBtn.getHeight());
 
         touchPoint = new Vector3();

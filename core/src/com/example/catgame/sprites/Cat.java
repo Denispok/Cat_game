@@ -10,12 +10,12 @@ import java.util.Random;
 
 public class Cat {
 
-    private static final double WAITTIME = 2;
-    private static final double VELOCITY = 50;
+    private static final double WAITTIME = 3;
+    private static final double VELOCITY = 10;
 
     private double wait_time;
-    private Texture cat;
     private Vector3 position;
+    private String state;
     private int current_point_id;
     private float current_distance_x;
     private float current_distance_y;
@@ -23,14 +23,18 @@ public class Cat {
     private int direction_x; // -1 is LEFT, 1 is RIGHT
     private int direction_y;
     private boolean point_active;
+    private CatAnimation catAnim;
 
     public Cat(Room room) {
-        cat = new Texture("test cat.png");
+        catAnim = new CatAnimation();
         Random random = new Random();
 
+        //RANDOM SPAWN
         current_point_id = room.getWpBySpawnId(random.nextInt(room.spawnCount()) + 1).getId(); //spawn point count
         position = new Vector3(room.getWp(current_point_id).getPoint().x, room.getWp(current_point_id).getPoint().y, 0); // get rectangle coord from wp class
         wait_time = WAITTIME;
+        catAnim.currentFrame = catAnim.sitAnimation.getKeyFrame(5);
+        state = "begin";
     }
 
     public void update(float dt, Room room) {
@@ -46,6 +50,9 @@ public class Cat {
                     position.x = room.getWp(current_point_id).getPoint().getX();
                     position.y = room.getWp(current_point_id).getPoint().getY();
                     wait_time = WAITTIME;
+                    catAnim.stateTime = 0;
+                    catAnim.currentFrame = catAnim.sitAnimation.getKeyFrame(catAnim.stateTime, false);
+                    state = "sit";
                 }
             }
 
@@ -55,6 +62,9 @@ public class Cat {
                     position.x = room.getWp(current_point_id).getPoint().getX();
                     position.y = room.getWp(current_point_id).getPoint().getY();
                     wait_time = WAITTIME;
+                    catAnim.stateTime = 0;
+                    catAnim.currentFrame = catAnim.sitAnimation.getKeyFrame(catAnim.stateTime, false);
+                    state = "sit";
                 }
             }
 
@@ -64,6 +74,9 @@ public class Cat {
                     position.x = room.getWp(current_point_id).getPoint().getX();
                     position.y = room.getWp(current_point_id).getPoint().getY();
                     wait_time = WAITTIME;
+                    catAnim.stateTime = 0;
+                    catAnim.currentFrame = catAnim.sitAnimation.getKeyFrame(catAnim.stateTime, false);
+                    state = "sit";
                 }
             }
 
@@ -73,12 +86,25 @@ public class Cat {
                     position.x = room.getWp(current_point_id).getPoint().getX();
                     position.y = room.getWp(current_point_id).getPoint().getY();
                     wait_time = WAITTIME;
+                    catAnim.stateTime = 0;
+                    catAnim.currentFrame = catAnim.sitAnimation.getKeyFrame(catAnim.stateTime, false);
+                    state = "sit";
                 }
             }
         }
 
 
         //Gdx.app.log("D", "wait_time: " + String.valueOf(wait_time));
+    }
+
+    public void render(SpriteBatch sb) {
+        catAnim.stateTime += Gdx.graphics.getDeltaTime();
+        if (state.equals("walk")) {
+            catAnim.currentFrame = catAnim.walkAnimation.getKeyFrame(catAnim.stateTime, true);
+        } else if (state.equals("sit")){
+            catAnim.currentFrame = catAnim.sitAnimation.getKeyFrame(catAnim.stateTime, false);
+        }
+        sb.draw(catAnim.currentFrame, position.x, position.y);
     }
 
     private void catMove() {
@@ -107,10 +133,7 @@ public class Cat {
         current_hypotinuse = Math.hypot(current_distance_x, current_distance_y);
 
         point_active = true;
-    }
-
-    public void render(SpriteBatch sb) {
-        sb.draw(cat, position.x, position.y);
+        state = "walk";
     }
 }
 
