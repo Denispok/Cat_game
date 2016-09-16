@@ -7,7 +7,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class CatAnimation {
 
-    private static final float FRAME_SPEED = 0.20f;
+    private static final float FRAME_SPEED = 0.15f;
+    public static final float JUMP_SPEED = 0.15f;
 
     private static final int WALK_COLS = 4;
     Animation walkAnimation;
@@ -24,13 +25,13 @@ public class CatAnimation {
     Texture lieSheet;
     TextureRegion[] lieFrames;
 
-    private static final int JUMP_COLS = 9;
+    private static final int JUMP_COLS = 8;
     Animation jumpAnimation;
     Texture jumpSheet;
     TextureRegion[] jumpFrames;
 
     TextureRegion currentFrame;
-    float stateTime;
+    public float stateTime;
 
     public CatAnimation() {
         initWalk();
@@ -77,7 +78,7 @@ public class CatAnimation {
     }
 
     private void initJump() {
-        jumpSheet = new Texture("cat_jump_sheet.png");
+        jumpSheet = new Texture("cat_jump_sheet8f.png");
         jumpSheet.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         TextureRegion[][] tmp = TextureRegion.split(jumpSheet, jumpSheet.getWidth()/JUMP_COLS, jumpSheet.getHeight());
         jumpFrames = new TextureRegion[JUMP_COLS];
@@ -85,6 +86,6 @@ public class CatAnimation {
         for (int i = 0; i < JUMP_COLS; i++) {
             jumpFrames[index++] = tmp[0][i];
         }
-        jumpAnimation = new Animation(FRAME_SPEED, jumpFrames);
+        jumpAnimation = new Animation(JUMP_SPEED, jumpFrames);
     }
 }

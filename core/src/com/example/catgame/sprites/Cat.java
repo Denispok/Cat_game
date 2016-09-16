@@ -1,7 +1,6 @@
 package com.example.catgame.sprites;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.example.catgame.locations.Room;
@@ -10,13 +9,15 @@ import java.util.Random;
 
 public class Cat {
 
-    private static final double WAITTIME = 3;
+    private static final double WAITTIME = 2;
     private static final double VELOCITY = 5;
+    private static final double VELOCITY_JUMP = 10;
 
     private double wait_time;
     private Vector3 position;
     private String state;
     private int current_point_id;
+    private int old_id;
     private float current_distance_x;
     private float current_distance_y;
     private double current_hypotenuse;
@@ -45,51 +46,23 @@ public class Cat {
             if (!point_active) findNewPoint(room);
 
             if (direction_x == 1 && direction_y == 1){
-                if (position.x < room.getWp(current_point_id).getPoint().getX() || position.y < room.getWp(current_point_id).getPoint().getY()) catMove();
-                else {
-                    position.x = room.getWp(current_point_id).getPoint().getX();
-                    position.y = room.getWp(current_point_id).getPoint().getY();
-                    wait_time = WAITTIME;
-                    catAnim.stateTime = 0;
-                    catAnim.currentFrame = catAnim.sitAnimation.getKeyFrame(catAnim.stateTime, false);
-                    state = "sit";
-                }
+                if (position.x < room.getWp(current_point_id).getPoint().getX() || position.y < room.getWp(current_point_id).getPoint().getY()) catMove(room);
+                else catStop(room);
             }
 
             if (direction_x == 1 && direction_y == -1){
-                if (position.x < room.getWp(current_point_id).getPoint().getX() || position.y > room.getWp(current_point_id).getPoint().getY()) catMove();
-                else {
-                    position.x = room.getWp(current_point_id).getPoint().getX();
-                    position.y = room.getWp(current_point_id).getPoint().getY();
-                    wait_time = WAITTIME;
-                    catAnim.stateTime = 0;
-                    catAnim.currentFrame = catAnim.sitAnimation.getKeyFrame(catAnim.stateTime, false);
-                    state = "sit";
-                }
+                if (position.x < room.getWp(current_point_id).getPoint().getX() || position.y > room.getWp(current_point_id).getPoint().getY()) catMove(room);
+                else catStop(room);
             }
 
             if (direction_x == -1 && direction_y == 1){
-                if (position.x > room.getWp(current_point_id).getPoint().getX() || position.y < room.getWp(current_point_id).getPoint().getY()) catMove();
-                else {
-                    position.x = room.getWp(current_point_id).getPoint().getX();
-                    position.y = room.getWp(current_point_id).getPoint().getY();
-                    wait_time = WAITTIME;
-                    catAnim.stateTime = 0;
-                    catAnim.currentFrame = catAnim.sitAnimation.getKeyFrame(catAnim.stateTime, false);
-                    state = "sit";
-                }
+                if (position.x > room.getWp(current_point_id).getPoint().getX() || position.y < room.getWp(current_point_id).getPoint().getY()) catMove(room);
+                else catStop(room);
             }
 
             if (direction_x == -1 && direction_y == -1){
-                if (position.x > room.getWp(current_point_id).getPoint().getX() || position.y > room.getWp(current_point_id).getPoint().getY()) catMove();
-                else {
-                    position.x = room.getWp(current_point_id).getPoint().getX();
-                    position.y = room.getWp(current_point_id).getPoint().getY();
-                    wait_time = WAITTIME;
-                    catAnim.stateTime = 0;
-                    catAnim.currentFrame = catAnim.sitAnimation.getKeyFrame(catAnim.stateTime, false);
-                    state = "sit";
-                }
+                if (position.x > room.getWp(current_point_id).getPoint().getX() || position.y > room.getWp(current_point_id).getPoint().getY()) catMove(room);
+                else catStop(room);
             }
         }
 
@@ -115,7 +88,16 @@ public class Cat {
             animFlip();
         }
 
-        sb.draw(catAnim.currentFrame, position.x, position.y);
+        //Gdx.app.log("D", "wait_time: " + String.valueOf(catAnim.stateTime));
+
+        if ((state.equals("jump") && direction_x == -1 && direction_y == -1 && catAnim.stateTime >= 4*catAnim.JUMP_SPEED && catAnim.stateTime < 6*catAnim.JUMP_SPEED)) {
+            sb.draw(catAnim.currentFrame, position.x, position.y, catAnim.currentFrame.getRegionWidth() / 2, catAnim.currentFrame.getRegionHeight() / 2,
+                    catAnim.currentFrame.getRegionWidth(), catAnim.currentFrame.getRegionHeight(), 1, 1, 45);
+        } else if ((state.equals("jump") && direction_x == 1 && direction_y == -1 && catAnim.stateTime >= 4*catAnim.JUMP_SPEED && catAnim.stateTime < 6*catAnim.JUMP_SPEED)){
+            sb.draw(catAnim.currentFrame, position.x, position.y, catAnim.currentFrame.getRegionWidth() / 2, catAnim.currentFrame.getRegionHeight() / 2,
+                    catAnim.currentFrame.getRegionWidth(), catAnim.currentFrame.getRegionHeight(), 1, 1, -45);
+        } else sb.draw(catAnim.currentFrame, position.x, position.y);
+
     }
 
     private void animFlip() {
@@ -123,7 +105,14 @@ public class Cat {
         else if(catAnim.currentFrame.isFlipX() && direction_x == -1) catAnim.currentFrame.flip(true, false);
     }
 
-    private void catMove() {
+    private void catMove(Room room) {
+        if((room.getWp(current_point_id).jump_map.get(old_id) != 0 &&
+                room.getWp(current_point_id).jump_map.get(old_id) >= Math.hypot(Math.abs(room.getWp(current_point_id).getPoint().getX() - position.x),
+                        Math.abs(room.getWp(current_point_id).getPoint().getY() - position.y))) || (room.getWp(current_point_id).jump_map.get(old_id) == -1)) {
+            catJump();
+            return;
+        }
+
         if (current_distance_x != 0 && current_distance_y != 0){
             position.x += direction_x * VELOCITY * (current_distance_x / current_hypotenuse);
             position.y += direction_y * VELOCITY * (current_distance_y / current_hypotenuse);
@@ -134,9 +123,36 @@ public class Cat {
         }
     }
 
+    private void catStop(Room room) {
+        position.x = room.getWp(current_point_id).getPoint().getX();
+        position.y = room.getWp(current_point_id).getPoint().getY();
+        wait_time = WAITTIME;
+        catAnim.stateTime = 0;
+        catAnim.currentFrame = catAnim.sitAnimation.getKeyFrame(catAnim.stateTime, false);
+        state = "sit";
+    }
+
+    private void catJump(){
+        if (!state.equals("jump")){
+            catAnim.stateTime = 0;
+            state = "jump";
+        }
+
+        if(catAnim.stateTime <= 3*catAnim.JUMP_SPEED) return;
+
+        if (current_distance_x != 0 && current_distance_y != 0){
+            position.x += direction_x * VELOCITY_JUMP * (current_distance_x / current_hypotenuse);
+            position.y += direction_y * VELOCITY_JUMP * (current_distance_y / current_hypotenuse);
+        } else if (current_distance_x != 0){
+            position.x += direction_x * VELOCITY_JUMP;
+        } else if (current_distance_y != 0){
+            position.y += direction_y * VELOCITY_JUMP;
+        }
+    }
+
     private void findNewPoint(Room room) {
         Random random = new Random();
-        int old_id = current_point_id;
+        old_id = current_point_id;
         do {
             current_point_id = room.getWp(current_point_id).getRoutes()[random.nextInt((room.getWp(current_point_id).getRoutes().length))];
         } while (current_point_id == old_id);
