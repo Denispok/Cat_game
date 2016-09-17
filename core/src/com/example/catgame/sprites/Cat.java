@@ -10,6 +10,7 @@ import java.util.Random;
 public class Cat {
 
     private static final double WAITTIME = 2;
+    private static final double WAIT_AFTER_JUMP = 0.1;
     private static final double VELOCITY = 5;
     private static final double VELOCITY_JUMP = 10;
 
@@ -18,6 +19,7 @@ public class Cat {
     private String state;
     private int current_point_id;
     private int old_id;
+    private double wait_after_jump;
     private float current_distance_x;
     private float current_distance_y;
     private double current_hypotenuse;
@@ -84,7 +86,7 @@ public class Cat {
         } else if (state.equals("lie")){
             catAnim.currentFrame = catAnim.lieAnimation.getKeyFrame(catAnim.stateTime, false);
             animFlip();
-        } else if (state.equals("jump")){
+        } else if (state.equals("jump") || state.equals("jump_walk")){
             catAnim.currentFrame = catAnim.jumpAnimation.getKeyFrame(catAnim.stateTime, false);
             animFlip();
         }
@@ -115,11 +117,22 @@ public class Cat {
         } else if (room.getWp(current_point_id).jump_map.get(old_id) < -1 && current_hypotenuse -
                 Math.hypot(Math.abs(room.getWp(current_point_id).getPoint().getX() - position.x), Math.abs(room.getWp(current_point_id).getPoint().getY() - position.y))
                 < Math.abs(room.getWp(current_point_id).jump_map.get(old_id))){
+            if (!state.equals("jump_walk")){
+                state = "jump_walk";
+                wait_after_jump = 0;
+                catAnim.stateTime = 0;
+            }
             catJump();
             return;
         }
 
-        if (!state.equals("walk")) state = "walk";
+        if (state.equals("jump_walk")){
+            wait_after_jump += Gdx.graphics.getDeltaTime();
+            if (wait_after_jump >= WAIT_AFTER_JUMP){
+                state = "walk";
+            }
+            return;
+        }
 
         if (current_distance_x != 0 && current_distance_y != 0){
             position.x += direction_x * VELOCITY * (current_distance_x / current_hypotenuse);
@@ -157,7 +170,7 @@ public class Cat {
     }
 
     private void catJump(){
-        if (!state.equals("jump")){
+        if (!state.equals("jump") && !state.equals("jump_walk")){
             catAnim.stateTime = 0;
             state = "jump";
         }
@@ -176,10 +189,13 @@ public class Cat {
 
     private void findNewPoint(Room room) {
         Random random = new Random();
+        int prev_id = old_id;
         old_id = current_point_id;
-        do {
-            current_point_id = room.getWp(current_point_id).getRoutes()[random.nextInt((room.getWp(current_point_id).getRoutes().length))];
-        } while (current_point_id == old_id);
+        if (room.getWp(old_id).getRoutes().length > 1) {
+            do {
+                current_point_id = room.getWp(old_id).getRoutes()[random.nextInt((room.getWp(old_id).getRoutes().length))];
+            } while (current_point_id == prev_id);
+        } else current_point_id = room.getWp(old_id).getRoutes()[random.nextInt((room.getWp(old_id).getRoutes().length))];
 
         if (room.getWp(current_point_id).getPoint().getX() >= room.getWp(old_id).getPoint().getX()) direction_x = 1; else direction_x = -1;
         if (room.getWp(current_point_id).getPoint().getY() >= room.getWp(old_id).getPoint().getY()) direction_y = 1; else direction_y = -1;
