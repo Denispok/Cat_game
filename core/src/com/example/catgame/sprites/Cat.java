@@ -34,7 +34,8 @@ public class Cat {
         current_point_id = room.getWpBySpawnId(random.nextInt(room.spawnCount()) + 1).getId(); //spawn point count
         position = new Vector3(room.getWp(current_point_id).getPoint().x, room.getWp(current_point_id).getPoint().y, 0); // get rectangle coord from wp class
         wait_time = WAITTIME;
-        catAnim.currentFrame = catAnim.sitAnimation.getKeyFrame(5);
+        if (random.nextInt(2) == 0) catAnim.currentFrame = catAnim.sitAnimation.getKeyFrame(5);
+        else catAnim.currentFrame = catAnim.lieAnimation.getKeyFrame(5);
         state = "begin";
     }
 
@@ -111,7 +112,14 @@ public class Cat {
                         Math.abs(room.getWp(current_point_id).getPoint().getY() - position.y))) || (room.getWp(current_point_id).jump_map.get(old_id) == -1)) {
             catJump();
             return;
+        } else if (room.getWp(current_point_id).jump_map.get(old_id) < -1 && current_hypotenuse -
+                Math.hypot(Math.abs(room.getWp(current_point_id).getPoint().getX() - position.x), Math.abs(room.getWp(current_point_id).getPoint().getY() - position.y))
+                < Math.abs(room.getWp(current_point_id).jump_map.get(old_id))){
+            catJump();
+            return;
         }
+
+        if (!state.equals("walk")) state = "walk";
 
         if (current_distance_x != 0 && current_distance_y != 0){
             position.x += direction_x * VELOCITY * (current_distance_x / current_hypotenuse);
@@ -128,8 +136,24 @@ public class Cat {
         position.y = room.getWp(current_point_id).getPoint().getY();
         wait_time = WAITTIME;
         catAnim.stateTime = 0;
-        catAnim.currentFrame = catAnim.sitAnimation.getKeyFrame(catAnim.stateTime, false);
-        state = "sit";
+        if (room.getWp(current_point_id).getPossible_states() == 0){
+            Random random = new Random();
+            if (random.nextInt(4) < 3) {  //25% lie
+                catAnim.currentFrame = catAnim.sitAnimation.getKeyFrame(catAnim.stateTime, false);
+                state = "sit";
+            }
+            else {
+                catAnim.currentFrame = catAnim.lieAnimation.getKeyFrame(catAnim.stateTime, false);
+                state = "lie";
+            }
+        } else if (room.getWp(current_point_id).getPossible_states() == 1) {
+            catAnim.currentFrame = catAnim.sitAnimation.getKeyFrame(catAnim.stateTime, false);
+            state = "sit";
+        }
+        else {
+            catAnim.currentFrame = catAnim.lieAnimation.getKeyFrame(catAnim.stateTime, false);
+            state = "lie";
+        }
     }
 
     private void catJump(){

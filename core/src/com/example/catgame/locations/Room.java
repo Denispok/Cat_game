@@ -17,13 +17,17 @@ public class Room {
     }
 
     private void init_wp(OrthographicCamera cam) { // GAME FIELD 16:9 !!!
-        wp.add(new Waypoint(cam, 0, 0, 0, 90, 180, 1, 2, 3));
+        wp.add(new Waypoint(cam, 0, 0, 0, 90, 180, 1));
+        wp.get(0).jump_map.put(1, 350);
+        wp.add(new Waypoint(cam, 1, 1, 0, 554, 35, 0));
+        wp.get(1).jump_map.put(0, -350);
+        /*wp.add(new Waypoint(cam, 0, 0, 0, 90, 180, 1, 2, 3));
         wp.get(0).jump_map.put(1, -1);
         wp.get(0).jump_map.put(2, -1);
         wp.get(0).jump_map.put(3, 350);
         wp.add(new Waypoint(cam, 1, 0, 0, 250, 0, 0, 3));
         wp.get(1).jump_map.put(0, -1);
-        wp.add(new Waypoint(cam, 2, 1, 0, 260, 564, 0));
+        wp.add(new Waypoint(cam, 2, 1, 2, 240, 556, 0));
         wp.get(2).jump_map.put(0, -1);
         wp.add(new Waypoint(cam, 3, 0, 0, 554, 35, 0, 1, 4, 5));
         wp.get(3).jump_map.put(0, -1);
@@ -37,7 +41,7 @@ public class Room {
         wp.get(7).jump_map.put(6, -1);
         wp.get(7).jump_map.put(9, -1);
         wp.add(new Waypoint(cam, 8, 0, 0, 1248, 0, 5, 7, 11));
-        wp.add(new Waypoint(cam, 9, 0, 0, 1360, 395, 7, 10));
+        wp.add(new Waypoint(cam, 9, 0, 1, 1360, 395, 7, 10));
         wp.get(9).jump_map.put(7, -1);
         wp.get(9).jump_map.put(10, -1);
         wp.add(new Waypoint(cam, 10, 3, 0, 1500, 300, 9, 11, 12));
@@ -46,8 +50,8 @@ public class Room {
         wp.get(10).jump_map.put(12, -1);
         wp.add(new Waypoint(cam, 11, 0, 0, 1650, 20, 8, 10));
         wp.get(11).jump_map.put(10, -1);
-        wp.add(new Waypoint(cam, 12, 0, 0, 1700, 380, 10));
-        wp.get(12).jump_map.put(10, -1);
+        wp.add(new Waypoint(cam, 12, 0, 1, 1700, 380, 10));
+        wp.get(12).jump_map.put(10, -1);*/
     }
 
     public Waypoint getWp (int id){

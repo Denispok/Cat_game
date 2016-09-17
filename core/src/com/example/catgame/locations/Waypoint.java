@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.example.catgame.CatGame;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class Waypoint {
 
@@ -73,6 +72,10 @@ public class Waypoint {
         for(int i = 0; i < routes.length; i++){
             jump_map.put(routes[i], 0);
         }
+    }
+
+    public int getPossible_states() {
+        return possible_states;
     }
 
     public int getSpawn_id() {
