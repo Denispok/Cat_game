@@ -54,6 +54,10 @@ public class Room {
         wp.get(12).jump_map.put(10, -1);
     }
 
+    public List<Waypoint> getWpList() {
+        return wp;
+    }
+
     public Waypoint getWp (int id){
         if (wp.get(id) != null) return wp.get(id);
         else return null;

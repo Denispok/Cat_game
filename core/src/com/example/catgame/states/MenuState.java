@@ -2,6 +2,7 @@ package com.example.catgame.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -23,6 +24,7 @@ public class MenuState extends State {
 
     public MenuState(GameStateManager gsm) {
         super(gsm);
+        Gdx.input.setCatchBackKey(false);
 
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
@@ -69,10 +71,11 @@ public class MenuState extends State {
     @Override
     public void render(SpriteBatch sb) {
         sb.setProjectionMatrix(camera.combined);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         sb.begin();
         sb.draw(background, 0, 0);
         sb.draw(playBtn, camera.position.x - (playBtn.getWidth() / 2), (camera.position.y / 2) * 3 - (playBtn.getHeight() / 2));
-        sb.draw(recordsBtn, camera.position.x - (recordsBtn.getWidth() / 2), camera.position.y - (playBtn.getHeight() / 2));
+        sb.draw(recordsBtn, camera.position.x - (recordsBtn.getWidth() / 2), camera.position.y - (recordsBtn.getHeight() / 2));
         sb.draw(exitBtn, camera.position.x - (exitBtn.getWidth() / 2), (camera.position.y / 2) * 1 - (exitBtn.getHeight() / 2));
         sb.end();
     }
