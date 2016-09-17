@@ -16,12 +16,12 @@ public class CatAnimation {
     TextureRegion[] walkFrames;
 
     private static final int SIT_COLS = 5;
-    Animation sitAnimation;
+    public Animation sitAnimation;
     Texture sitSheet;
     TextureRegion[] sitFrames;
 
     private static final int LIE_COLS = 5;
-    Animation lieAnimation;
+    public Animation lieAnimation;
     Texture lieSheet;
     TextureRegion[] lieFrames;
 

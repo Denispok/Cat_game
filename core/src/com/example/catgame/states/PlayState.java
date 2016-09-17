@@ -22,6 +22,7 @@ public class PlayState extends State {
     private Vector3 touchPoint;
     private Texture gameover;
     private int cat_position_id;
+    private int cat_pose; // 0 - sit, 1 - lie
     private int touch_count;
     private Rectangle menuBtn;
     private Rectangle againBtn;
@@ -62,11 +63,17 @@ public class PlayState extends State {
             }
         }
 
+        if (Gdx.input.justTouched() && cur_state.equals("caught")) {
+            Random random = new Random();
+            cat_pose = random.nextInt(2);
+            cur_state = "over";
+        }
+
         if (Gdx.input.justTouched() && cur_state.equals("finding")) {
             touch_count++;
             camera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
             if (room.getWp(cat_position_id).getPoint().contains(touchPoint.x, touchPoint.y)){
-                cur_state = "over";
+                cur_state = "caught";
                 Gdx.input.vibrate(50);
             }
         }
@@ -91,9 +98,11 @@ public class PlayState extends State {
         sb.setProjectionMatrix(camera.combined);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         sb.begin();
-        if (cur_state.equals("watching") || cur_state.equals("over")) sb.draw(room.getRoomBg(),
+        if (cur_state.equals("watching") || cur_state.equals("caught") || cur_state.equals("over")) sb.draw(room.getRoomBg(),
                 camera.position.x - camera.viewportWidth / 2, camera.position.y - room.getRoomBg().getHeight() / 2);
         if (cur_state.equals("watching")) cat.render(sb);
+        if (cur_state.equals("caught") && cat_pose == 0) sb.draw(cat.catAnim.sitAnimation.getKeyFrame(5), room.getWp(cat_position_id).getPoint().x, room.getWp(cat_position_id).getPoint().y);
+        if (cur_state.equals("caught") && cat_pose == 1) sb.draw(cat.catAnim.lieAnimation.getKeyFrame(5), room.getWp(cat_position_id).getPoint().x, room.getWp(cat_position_id).getPoint().y);
         if (cur_state.equals("over")) sb.draw(gameover, camera.position.x - (gameover.getWidth() / 2), camera.position.y - (gameover.getHeight() / 2));
         if (cur_state.equals("over")) font.draw(sb, String.valueOf(touch_count), 1414, (camera.position.y - CatGame.HEIGHT_PRJ / 2) + 585);
         sb.end();

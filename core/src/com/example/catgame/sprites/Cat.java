@@ -26,7 +26,7 @@ public class Cat {
     private int direction_x; // -1 is LEFT, 1 is RIGHT
     private int direction_y;
     private boolean point_active;
-    private CatAnimation catAnim;
+    public CatAnimation catAnim;
 
     public Cat(Room room) {
         catAnim = new CatAnimation();
@@ -206,6 +206,10 @@ public class Cat {
 
         point_active = true;
         state = "walk";
+    }
+
+    public CatAnimation getCatAnim() {
+        return catAnim;
     }
 }
 
