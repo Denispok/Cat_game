@@ -56,6 +56,7 @@ public class MenuState extends State {
             }
             if (exitBounds.contains(touchPoint.x, touchPoint.y)) {
                 gsm.pop();
+                Gdx.app.exit();
             }
         }
     }

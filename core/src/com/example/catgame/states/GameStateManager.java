@@ -1,5 +1,6 @@
 package com.example.catgame.states;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.Stack;
@@ -17,7 +18,9 @@ public class GameStateManager {
     }
 
     public void pop(){
-        states.pop().dispose();
+        if (states.size() == 1){
+            states.get(0).dispose();
+        } else states.pop().dispose();
     }
 
     public void set(State state){
