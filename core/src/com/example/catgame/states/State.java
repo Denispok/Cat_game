@@ -9,7 +9,6 @@ import com.example.catgame.CatGame;
 public abstract class State {
 
     protected OrthographicCamera camera;
-    protected Vector3 mouse;
     protected GameStateManager gsm;
 
     public State(GameStateManager gsm){
@@ -18,8 +17,6 @@ public abstract class State {
         //camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera = new OrthographicCamera(CatGame.WIDTH_PRJ, CatGame.WIDTH_PRJ * CatGame.RATIO);
         camera.update();
-
-        mouse = new Vector3();
     }
 
     protected abstract void handleInput();

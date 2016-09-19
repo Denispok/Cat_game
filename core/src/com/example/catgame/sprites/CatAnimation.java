@@ -88,4 +88,11 @@ public class CatAnimation {
         }
         jumpAnimation = new Animation(JUMP_SPEED, jumpFrames);
     }
+
+    public void dispose() {
+        walkSheet.dispose();
+        sitSheet.dispose();
+        lieSheet.dispose();
+        jumpSheet.dispose();
+    }
 }

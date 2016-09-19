@@ -19,7 +19,7 @@ public class GameStateManager {
 
     public void pop(){
         if (states.size() == 1){
-            states.get(0).dispose();
+            states.peek().dispose();
         } else states.pop().dispose();
     }
 

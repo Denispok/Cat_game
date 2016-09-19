@@ -2,6 +2,7 @@ package com.example.catgame.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -54,7 +55,7 @@ public class MenuState extends State {
                 gsm.set(new PlayState(gsm));
             }
             if (recordsBounds.contains(touchPoint.x, touchPoint.y)) {
-                Gdx.app.log("D", "success bich2");
+                gsm.set(new RecordsState(gsm));
             }
             if (exitBounds.contains(touchPoint.x, touchPoint.y)) {
                 gsm.pop();
@@ -71,7 +72,6 @@ public class MenuState extends State {
     @Override
     public void render(SpriteBatch sb) {
         sb.setProjectionMatrix(camera.combined);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         sb.begin();
         sb.draw(background, 0, 0);
         sb.draw(playBtn, camera.position.x - (playBtn.getWidth() / 2), (camera.position.y / 2) * 3 - (playBtn.getHeight() / 2));

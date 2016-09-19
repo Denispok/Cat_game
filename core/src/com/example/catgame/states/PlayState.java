@@ -2,6 +2,8 @@ package com.example.catgame.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -27,14 +29,18 @@ public class PlayState extends State {
     private Rectangle menuBtn;
     private Rectangle againBtn;
     private BitmapFont font;
+    private Preferences records;
+
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
         Gdx.input.setCatchBackKey(true);
+        records = Gdx.app.getPreferences("records");
+
         touchPoint = new Vector3();
-        font = new BitmapFont();
-        font.setColor(0, 0, 0, 1);
-        font.getData().setScale(4);
+        font = new BitmapFont(Gdx.files.internal("sitka.fnt"), Gdx.files.internal("sitka.png"), false);
+        font.setColor(Color.BLACK);
+        //font.getData().setScale(4);
 
 
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
@@ -64,8 +70,15 @@ public class PlayState extends State {
         }
 
         if (Gdx.input.justTouched() && cur_state.equals("caught")) {
-            Random random = new Random();
-            cat_pose = random.nextInt(2);
+            boolean is_recorded = false;
+            for (int i = 1; i <= 5 ; i++){
+                if (records.getInteger(String.valueOf(i)) > touch_count || records.getInteger(String.valueOf(i)) == 0){
+                    records.putInteger(String.valueOf(i), touch_count);
+                    records.flush();
+                    is_recorded = true;
+                }
+                if (is_recorded) i = 6;//return;
+            }
             cur_state = "over";
         }
 
@@ -73,8 +86,15 @@ public class PlayState extends State {
             touch_count++;
             camera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
             if (room.getWp(cat_position_id).getPoint().contains(touchPoint.x, touchPoint.y)){
-                cur_state = "caught";
+                Random random = new Random(); // random cat pose
+                if (room.getWp(cat_position_id).getPossible_states() == 0) {
+                    if (random.nextInt(2) == 0) cat_pose = 0;
+                    else cat_pose = 1;
+                } else if (room.getWp(cat_position_id).getPossible_states() == 1) cat_pose = 0;
+                else cat_pose = 1;
+
                 Gdx.input.vibrate(50);
+                cur_state = "caught";
             }
         }
 
@@ -96,7 +116,6 @@ public class PlayState extends State {
     @Override
     public void render(SpriteBatch sb) {
         sb.setProjectionMatrix(camera.combined);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         sb.begin();
         if (cur_state.equals("watching") || cur_state.equals("caught") || cur_state.equals("over")) sb.draw(room.getRoomBg(),
                 camera.position.x - camera.viewportWidth / 2, camera.position.y - room.getRoomBg().getHeight() / 2);
@@ -104,12 +123,15 @@ public class PlayState extends State {
         if (cur_state.equals("caught") && cat_pose == 0) sb.draw(cat.catAnim.sitAnimation.getKeyFrame(5), room.getWp(cat_position_id).getPoint().x, room.getWp(cat_position_id).getPoint().y);
         if (cur_state.equals("caught") && cat_pose == 1) sb.draw(cat.catAnim.lieAnimation.getKeyFrame(5), room.getWp(cat_position_id).getPoint().x, room.getWp(cat_position_id).getPoint().y);
         if (cur_state.equals("over")) sb.draw(gameover, camera.position.x - (gameover.getWidth() / 2), camera.position.y - (gameover.getHeight() / 2));
-        if (cur_state.equals("over")) font.draw(sb, String.valueOf(touch_count), 1414, (camera.position.y - CatGame.HEIGHT_PRJ / 2) + 585);
+        if (cur_state.equals("over")) font.draw(sb, String.valueOf(touch_count), 1414, (camera.position.y - CatGame.HEIGHT_PRJ / 2) + 595);
         sb.end();
     }
 
     @Override
     public void dispose() {
-
+        gameover.dispose();
+        font.dispose();
+        cat.dispose();
+        room.dispose();
     }
 }

@@ -36,8 +36,16 @@ public class Cat {
         current_point_id = room.getWpBySpawnId(random.nextInt(room.spawnCount()) + 1).getId(); //spawn point count
         position = new Vector3(room.getWp(current_point_id).getPoint().x, room.getWp(current_point_id).getPoint().y, 0); // get rectangle coord from wp class
         wait_time = WAITTIME;
-        if (random.nextInt(2) == 0) catAnim.currentFrame = catAnim.sitAnimation.getKeyFrame(5);
+
+        if (room.getWp(current_point_id).getPossible_states() == 0) {
+            random = new Random();
+            if (random.nextInt(2) == 0) catAnim.currentFrame = catAnim.sitAnimation.getKeyFrame(5);
+            else catAnim.currentFrame = catAnim.lieAnimation.getKeyFrame(5);
+        } else if (room.getWp(current_point_id).getPossible_states() == 1) catAnim.currentFrame = catAnim.sitAnimation.getKeyFrame(5);
         else catAnim.currentFrame = catAnim.lieAnimation.getKeyFrame(5);
+
+        /*if (random.nextInt(2) == 0) catAnim.currentFrame = catAnim.sitAnimation.getKeyFrame(5);
+        else catAnim.currentFrame = catAnim.lieAnimation.getKeyFrame(5);*/
         state = "begin";
     }
 
@@ -210,6 +218,10 @@ public class Cat {
 
     public CatAnimation getCatAnim() {
         return catAnim;
+    }
+
+    public void dispose() {
+        catAnim.dispose();
     }
 }
 

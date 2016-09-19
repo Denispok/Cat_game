@@ -8,8 +8,8 @@ import java.util.HashMap;
 
 public class Waypoint {
 
-    private static final int POINT_WIDTH = 175;
-    private static final int POINT_HEIGHT = 145;
+    private static final int POINT_WIDTH = 260;
+    private static final int POINT_HEIGHT = 160;
 
     private int id;
     private int spawn_id;
